@@ -62,9 +62,9 @@ You can use any number of methods to upload your files.
 
 __*NOTE*__ Addition to any fields for CSRF or HTTP method the following fields **ARE ALWAYS REQUIRED** 
 
-  - fileable_type is the model namespace your saving the file too
-  - fileable_id is the id of the specific resource to attach it too
-  - fileable_relationship references the name of the relationship you create in the Model
+  - `fileable_type` is the model namespace your saving the file too
+  - `fileable_id` is the id of the specific resource to attach it too
+  - `fileable_relationship` references the name of the relationship you create in the Model
 
 ### Basic Form
 The most basic being a simple one off form field. You can have any other number of inputs for your needs.
