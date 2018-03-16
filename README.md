@@ -30,7 +30,7 @@ If you're on laravel 5.5 or later the service provider will be automatically loa
 ```
 
 ## Verification
-To verify the package was set up successfully you can `use MWIFiles` and then call `MWIFiles::verify()` in any method.
+To verify the package was set up successfully you can `use MWIFile` and then call `MWIFile::verify()` in any method.
 
 It should return the version of the service if successful.
 
