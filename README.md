@@ -62,6 +62,7 @@ You can use any number of methods to upload your files.
 
 __*NOTE*__ Addition to any fields for CSRF or HTTP method the following fields **ARE ALWAYS REQUIRED** 
 
+  - `file` obviously contains the file to be uploaded
   - `fileable_type` is the model namespace your saving the file too
   - `fileable_id` is the id of the specific resource to attach it too
   - `fileable_relationship` references the name of the relationship you create in the Model
@@ -69,7 +70,7 @@ __*NOTE*__ Addition to any fields for CSRF or HTTP method the following fields *
 ### Basic Form
 The most basic being a simple one off form field. You can have any other number of inputs for your needs.
 ```html
-<form action="{{ route('file-upload') }}" method="POST">
+<form action="{{ route('file-upload') }}" method="POST" enctype="multipart/form-data">
     <input type="file" name="file">
     <input type="hidden" value="\App\User" name="fileable_type">
     <input type="hidden" value="{{ $user->id }}" name="fileable_id">
@@ -78,7 +79,7 @@ The most basic being a simple one off form field. You can have any other number 
 ```
 
 # Usage
-Once you have the package and your template set up there are two methods available for use
+Once you have the package and your views set up there are two methods available for use
 ```php
 /**
  * The following will look for the `file` input in the request and
