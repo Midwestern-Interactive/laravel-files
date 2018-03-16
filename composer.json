@@ -1,0 +1,33 @@
+{
+    "name": "mwi/laravel-files",
+    "description": "MWI File Management",
+    "keywords": ["files", "laravel"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Matt Johnson",
+            "company": "Midwestern Interactive",
+            "email": "mj@buildmidwestern.com"
+        },
+        {
+            "name": "Ryan Doss",
+            "company": "Midwestern Interactive",
+            "email": "rd@buildmidwestern.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": { "MWI\\LaravelFiles\\": "src/" }
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "MWI\\LaravelFiles\\ServiceProvider"
+            ]
+        }
+    }
+}
