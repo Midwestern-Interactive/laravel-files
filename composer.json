@@ -1,6 +1,7 @@
 {
     "name": "mwi/laravel-files",
-    "description": "MWI File Management",
+    "description": "MWI Polymorphic File Management",
+    "version": "1.0.0",
     "keywords": ["files", "laravel"],
     "license": "MIT",
     "authors": [

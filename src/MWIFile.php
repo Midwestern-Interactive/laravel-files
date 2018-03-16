@@ -4,11 +4,20 @@ namespace MWI\LaravelFiles;
 
 use App\FileUpload;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Collection;
 
 class MWIFile
 {
+    private $version = '1.0.0';
+
+    /**
+     * Returns a string to verify MWIFiles is installed successfully
+     * @return string
+     */
+    public function verify()
+    {
+        return 'MWI Laravel Files installed successfully using version ' . $this->version;
+    }
+
     /**
      * Create a new file and associate it to the correct model.
      * @param  The upload request.

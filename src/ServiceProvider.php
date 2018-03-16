@@ -16,6 +16,12 @@ class ServiceProvider extends LaravelServiceProvider
         $this->publishes([
             __DIR__.'/database/' => database_path(),
         ], 'migrations');
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                Commands\Install::class
+            ]);
+        }
     }
 
     public function register()

@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File;
 use Illuminate\Database\Eloquent\Model;
 
 class FileUpload extends Model
@@ -25,7 +24,11 @@ class FileUpload extends Model
         return $this->morphTo();
     }
 
-    public function getUrlAttribute() {
+    /**
+     * Get the URL of the files
+     */
+    public function getUrlAttribute()
+    {
         return Storage::url($this->path);
     }
 }
