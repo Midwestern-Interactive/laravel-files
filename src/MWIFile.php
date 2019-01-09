@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 class MWIFile
 {
     private $version = '1.0.0';
+    public $request;
 
     /**
      * Returns a string to verify MWIFiles is installed successfully
@@ -25,23 +26,49 @@ class MWIFile
      */
     public function upload($request)
     {
-        $saved = $request->file('file')->store('public/uploads');
-        $file = FileUpload::create([
-            'path' => $saved,
-        ]);
+        $this->request = $request;
 
-        if ($request->has('fileable_type') && $request->has('fileable_id')) {
-            $model = $request->fileable_type::findOrfail($request->fileable_id);
-            $model->{$request->fileable_relationship}()->save($file);
+        if ($this->request->has('fileable_type') && $this->request->has('fileable_id')) {
+            $path = strtolower(substr($this->request->fileable_type, strrpos($this->request->fileable_type, "\\") + 1));
+            $file_upload = $this->saveFile($this->request->file('file'), 'public/' . $path . '/' . $this->request->fileable_id);
+
+            $model = $this->request->fileable_type::findOrfail($this->request->fileable_id);
+            $model->{$this->request->fileable_relationship}()->save($file_upload);
+
+            return $file_upload;
         }
 
-        return $file;
+        $file_upload = $this->saveFile($this->request->file('file'), 'public/uploads');
+
+        return $file_upload;
+    }
+
+    /**
+     * Saves a file to storage
+     * @param  \Illuminate\Http\UploadedFile $file
+     * @param  string $path
+     * @return \App\FileUpload
+     */
+    private function saveFile($file, $path)
+    {
+        $file = $this->request->file('file');
+        $saved = $file->store($path);
+
+        $file_upload = FileUpload::create([
+            'path' => $saved,
+            'original_filename' => $file->getClientOriginalName(),
+            'mime_type' => $file->getMimeType(),
+            'extension' => $file->extension(),
+            'size' => $file->getClientSize()
+        ]);
+
+        return $file_upload;
     }
 
     /**
      * Remove One File for many file relationships
      * @param  string $name
-     * @return \App\Role 
+     * @return \App\Role
      */
     public function remove($file)
     {

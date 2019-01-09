@@ -18,6 +18,10 @@ class CreateFileUploadTable extends Migration
             $table->string('fileable_id')->nullable();
             $table->string('fileable_type')->nullable();
             $table->string('path')->nullable();
+            $table->string('original_filename')->nullable();
+            $table->string('mime_type')->nullable();
+            $table->string('extension')->nullable();
+            $table->string('size')->nullable();
             $table->timestamps();
         });
     }
