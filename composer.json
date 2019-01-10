@@ -15,6 +15,9 @@
             "email": "rd@buildmidwestern.com"
         }
     ],
+    "require": {
+        "laravel/laravel": "^5.3"
+    },
     "autoload": {
         "psr-4": { "MWI\\LaravelFiles\\": "src/" }
     },

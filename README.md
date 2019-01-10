@@ -71,6 +71,7 @@ __*NOTE*__ Addition to any fields for CSRF or HTTP method the following fields *
 The most basic being a simple one off form field. You can have any other number of inputs for your needs.
 ```html
 <form action="{{ route('file-upload') }}" method="POST" enctype="multipart/form-data">
+    @csrf
     <input type="file" name="file">
     <input type="hidden" value="\App\User" name="fileable_type">
     <input type="hidden" value="{{ $user->id }}" name="fileable_id">
@@ -82,15 +83,16 @@ The most basic being a simple one off form field. You can have any other number 
 Once you have the package and your views set up there are two methods available for use
 ```php
 /**
- * The following will look for the `file` input in the request and
- * upload to the appropriate location while attaching it to the
- * model and resource specified by the other fields.
+ * @param \Illuminate\Http\UploadedFile $file The uploaded file
+ * @param Array $data An array requiring at least the following data:
+ *                      fileable_type
+ *                      fileable_id
+ *                      fileable_relationship
  */
-MWIFile::upload($request);
+MWIFile::upload($request->file('file'), $request->input());
 
 /**
- * This method takes the file resource specified and removes it from
- * the filesystem disk specified.
+ * @param \App\FileUpload $file_upload The file resource
  */
-MWIFile::remove($file);
+MWIFile::remove(FileUpload::latest()->first());
 ```

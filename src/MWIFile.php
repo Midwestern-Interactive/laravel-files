@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Storage;
 
 class MWIFile
 {
-    private $version = '1.0.2';
-    public $request;
+    private $version = '1.0.3';
+    public $data;
 
     /**
      * Returns a string to verify MWIFiles is installed successfully
@@ -24,21 +24,21 @@ class MWIFile
      * @param  The upload request.
      * @return \App\FileUpload
      */
-    public function upload($request)
+    public function upload($file, $data)
     {
-        $this->request = $request;
+        $this->data = $data;
 
-        if ($this->request->has('fileable_type') && $this->request->has('fileable_id')) {
-            $path = strtolower(substr($this->request->fileable_type, strrpos($this->request->fileable_type, "\\") + 1));
-            $file_upload = $this->saveFile($this->request->file('file'), 'public/' . $path . '/' . $this->request->fileable_id);
+        if ($this->data['fileable_type'] && $this->data['fileable_id']) {
+            $path = strtolower(substr($this->data['fileable_type'], strrpos($this->data['fileable_type'], "\\") + 1));
+            $file_upload = $this->saveFile($file, 'public/' . $path . '/' . $this->data['fileable_id']);
 
-            $model = $this->request->fileable_type::findOrfail($this->request->fileable_id);
-            $model->{$this->request->fileable_relationship}()->save($file_upload);
+            $model = $this->data['fileable_type']::findOrfail($this->data['fileable_id']);
+            $model->{$this->data['fileable_relationship']}()->save($file_upload);
 
             return $file_upload;
         }
 
-        $file_upload = $this->saveFile($this->request->file('file'), 'public/uploads');
+        $file_upload = $this->saveFile($file, 'public/uploads');
 
         return $file_upload;
     }
@@ -51,7 +51,6 @@ class MWIFile
      */
     private function saveFile($file, $path)
     {
-        $file = $this->request->file('file');
         $saved = $file->store($path);
 
         $file_upload = FileUpload::create([
