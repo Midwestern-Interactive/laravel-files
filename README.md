@@ -92,7 +92,7 @@ Once you have the package and your views set up there are two methods available 
 MWIFile::upload($request->file('file'), $request->input());
 
 /**
- * @param \App\FileUpload $file_upload The file resource
+ * @param \App\FileUpload $file The file resource
  */
 MWIFile::remove(FileUpload::latest()->first());
 ```
