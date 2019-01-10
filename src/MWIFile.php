@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Storage;
 
 class MWIFile
 {
-    private $version = '1.0.0';
+    private $version = '1.0.2';
     public $request;
 
     /**
