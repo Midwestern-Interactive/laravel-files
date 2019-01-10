@@ -13,7 +13,11 @@ class FileUpload extends Model
      * @var array
      */
     protected $fillable = [
-        'path'
+        'path',
+        'original_filename',
+        'mime_type',
+        'extension',
+        'size'
     ];
 
     /**
