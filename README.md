@@ -10,7 +10,7 @@ php artisan mwi:files:install
 ```
 
 ## Alias
-To use the facade add to your `config/app.php` aliases
+If you would like to use the facade, add to your `config/app.php` aliases
 ```php
 'aliases' => [
     // ...
@@ -54,6 +54,12 @@ class User extends Model
     {
         return $this->morphMany(FileUpload::class, 'fileable');
     }
+
+    // Specific type of relationship
+    public function photos()
+    {
+        return $this->morphMany(FileUpload::class, 'fileable')->where('type', 'photos');
+    }
 }
 ```
 
@@ -62,7 +68,7 @@ You can use any number of methods to upload your files.
 
 __*NOTE*__ Addition to any fields for CSRF or HTTP method the following fields **ARE ALWAYS REQUIRED** 
 
-  - `file` obviously contains the file to be uploaded
+  - `file` **REQUIRED** Contains the file to be uploaded
   - `fileable_type` is the model namespace your saving the file too
   - `fileable_id` is the id of the specific resource to attach it too
   - `fileable_relationship` references the name of the relationship you create in the Model
@@ -80,19 +86,39 @@ The most basic being a simple one off form field. You can have any other number 
 ```
 
 # Usage
-Once you have the package and your views set up there are two methods available for use
+Once you have the package and your views set up there are three methods available for use
 ```php
 /**
- * @param \Illuminate\Http\UploadedFile $file The uploaded file
- * @param Array $data An array requiring at least the following data:
- *                      fileable_type
- *                      fileable_id
- *                      fileable_relationship
+ * @param  \Illuminate\Http\UploadedFile  $file  The uploaded file
+ *
+ * @param  string                         $disk  The disk in which to upload the file too,
+ *                                               defaults to local, meaning it will not be publicly accessible.
+ *                                               Change to `public` for public files like profile photos.
+ *                                               It's recommend to use `config('filesystems.default')` as a standard
+ *                                               and then chagne as necessary for specific use cases
+ *
+ * @param  Array                          $data  An array requiring at least the following data, note that
+ *                                               if this data is not all present it will simply upload the file
+ *                                               and not be associtaed to a specific model:
+ *                                               fileable_type
+ *                                               fileable_id
+ *                                               fileable_relationship
  */
-MWIFile::upload($request->file('file'), $request->input());
+MWIFile::upload($request->file('file'), 'local', $request->input());
 
 /**
  * @param \App\FileUpload $file The file resource
+ *
+ * Note that if the file is publicly accessiblethis
+ * will redirect to it rather than initialize a download
+ */
+MWIFile::download(FileUpload::latest()->first());
+
+/**
+ * @param \App\FileUpload $file The file resource
+ *
+ * This just removed the relationship to the file,
+ * it does NOT delete the file from the filesystem
  */
 MWIFile::remove(FileUpload::latest()->first());
 ```

@@ -10,6 +10,7 @@ use Tests\TestCase;
 class MWIFilesTest extends TestCase
 {
     private $file;
+    private $disk;
     private $data;
 
     public function setUp()
@@ -19,6 +20,7 @@ class MWIFilesTest extends TestCase
         Storage::fake();
 
         $this->file = UploadedFile::fake()->image('profile.jpg');
+        $this->disk = 'local';
         $this->data = [
             'fileable_type' => '\App\User',
             'fileable_id' => 1,
@@ -29,7 +31,7 @@ class MWIFilesTest extends TestCase
     /** @test */
     public function a_file_is_uploaded_to_storage()
     {
-        $file_upload = MWIFile::upload($this->file, $this->data);
+        $file_upload = MWIFile::upload($this->file, $this->disk, $this->data);
 
         Storage::assertExists($file_upload->path);
     }
@@ -37,7 +39,7 @@ class MWIFilesTest extends TestCase
     /** @test */
     function a_file_can_be_removed()
     {
-        $file_upload = MWIFile::upload($this->file, $this->data);
+        $file_upload = MWIFile::upload($this->file, $this->disk, $this->data);
 
         MWIFile::remove($file_upload);
 

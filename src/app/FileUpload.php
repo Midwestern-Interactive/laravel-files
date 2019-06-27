@@ -13,11 +13,13 @@ class FileUpload extends Model
      * @var array
      */
     protected $fillable = [
+        'disk',
+        'type',
         'path',
         'original_filename',
         'mime_type',
         'extension',
-        'size'
+        'size',
     ];
 
     /**
@@ -30,9 +32,10 @@ class FileUpload extends Model
 
     /**
      * Get the URL of the files
+     * This will return an absolute url
      */
     public function getUrlAttribute()
     {
-        return Storage::url($this->path);
+        return Storage::disk($this->disk)->url($this->path);
     }
 }
