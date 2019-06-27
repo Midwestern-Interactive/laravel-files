@@ -58,6 +58,7 @@ class User extends Model
     // Specific type of relationship
     public function photos()
     {
+        // Where types value is equal to the value of `fileable_relationship` when saving
         return $this->morphMany(FileUpload::class, 'fileable')->where('type', 'photos');
     }
 }
