@@ -67,7 +67,7 @@ class User extends Model
 ## File Uploads
 You can use any number of methods to upload your files.
 
-__*NOTE*__ Addition to any fields for CSRF or HTTP method the following fields **ARE ALWAYS REQUIRED** 
+__*NOTE*__ Addition to any fields for CSRF or HTTP method the following fields available for use
 
   - `file` **REQUIRED** Contains the file to be uploaded
   - `fileable_type` is the model namespace your saving the file too
