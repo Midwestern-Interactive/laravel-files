@@ -2,27 +2,30 @@
 
 namespace Tests\Unit;
 
+use MWIFile;
+use Tests\TestCase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use MWI\LaravelFiles\MWIFile;
-use Tests\TestCase;
 
 class MWIFilesTest extends TestCase
 {
     private $file;
     private $disk;
     private $data;
+    private $modelsNamespace;
 
-    public function setUp()
+    public function setUp(): void
     {
-        parent::setup();
+        parent::setUp();
 
         Storage::fake();
+
+        $this->modelsNamespace = app()->version() < 8 ? 'App' : 'App\Models';
 
         $this->file = UploadedFile::fake()->image('profile.jpg');
         $this->disk = 'local';
         $this->data = [
-            'fileable_type' => '\App\User',
+            'fileable_type' =>  $this->modelsNamespace . '\User',
             'fileable_id' => 1,
             'fileable_relationship' => 'files'
         ];
@@ -37,7 +40,7 @@ class MWIFilesTest extends TestCase
     }
 
     /** @test */
-    function a_file_can_be_removed()
+    public function a_file_can_be_removed()
     {
         $file_upload = MWIFile::upload($this->file, $this->disk, $this->data);
 

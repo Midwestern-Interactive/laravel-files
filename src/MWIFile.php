@@ -2,12 +2,18 @@
 
 namespace MWI\LaravelFiles;
 
-use App\FileUpload;
 use Illuminate\Support\Facades\Storage;
-
 class MWIFile
 {
     private $version = '1.1.0';
+
+    /** @var string */
+    protected $fileUpload;
+
+    public function __construct()
+    {
+        $this->fileUpload = app()->version() < 8 ? 'App\FileUpload' : 'App\Models\FileUpload';
+    }
 
     /**
      * Returns a string to verify MWIFiles is installed successfully
@@ -39,7 +45,7 @@ class MWIFile
      *                      fileable_id            1
      *                      fileable_relationship  profilePhoto
      *
-     * @return \App\FileUpload
+     * @return \App\FileUpload|\App\Models\FileUpload
      */
     public function upload($file, $disk = 'local', $data = [])
     {
@@ -63,20 +69,20 @@ class MWIFile
      *
      * @param  \Illuminate\Http\UploadedFile $file
      * @param  string $path
-     * @return \App\FileUpload
+     * @return \App\FileUpload|\App\Models\FileUpload
      */
     private function saveFile($file, $path, $disk, $type)
     {
         $saved = $file->store($path, $disk);
 
-        $file_upload = FileUpload::create([
+        $file_upload = $this->fileUpload::create([
             'disk' => $disk,
             'type' => $type,
             'path' => $saved,
             'original_filename' => $file->getClientOriginalName(),
             'mime_type' => $file->getMimeType(),
             'extension' => $file->extension(),
-            'size' => $file->getClientSize(),
+            'size' => $file->getSize(),
         ]);
 
         return $file_upload;
@@ -85,7 +91,7 @@ class MWIFile
     /**
      * Download a file, this method assumes default disk roots
      *
-     * @param  FileUpload $file
+     * @param  \App\FileUpload|\App\Models\FileUpload $file
      * @return response|redirect
      */
     public function download($file)
@@ -99,10 +105,11 @@ class MWIFile
     /**
      * Remove a file
      *
-     * @param  \App\FileUpload $file
+     * @param \App\FileUpload|\App\Models\FileUpload $file
      */
     public function remove($file)
     {
+        Storage::delete($file->path);
         return $file->delete();
     }
 }
