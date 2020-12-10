@@ -20,6 +20,7 @@ class FileUpload extends Model
         'mime_type',
         'extension',
         'size',
+        'optimized_path',
     ];
 
     /**
@@ -37,5 +38,10 @@ class FileUpload extends Model
     public function getUrlAttribute()
     {
         return Storage::disk($this->disk)->url($this->path);
+    }
+
+    public function getOptimizedUrlAttribute()
+    {
+        return Storage::disk($this->disk)->url($this->optimized_path);
     }
 }
