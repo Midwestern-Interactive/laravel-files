@@ -9,9 +9,16 @@ class ServiceProvider extends LaravelServiceProvider
 {
     public function boot()
     {
-        $this->publishes([
-            __DIR__.'/app/' => app_path(),
-        ], 'models');
+        if (app()->version() < 8) {
+            $this->publishes([
+                __DIR__.'/app/' => app_path(),
+            ], 'models');
+        } else {
+
+            $this->publishes([
+                __DIR__.'/app/Models/' => app_path('Models'),
+            ], 'models');
+        }
 
         $this->publishes([
             __DIR__.'/database/' => database_path(),
